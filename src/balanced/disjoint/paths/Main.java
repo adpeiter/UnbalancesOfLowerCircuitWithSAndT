@@ -1,53 +1,59 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package balanced.disjoint.paths;
+
+import java.util.ArrayList;
 
 /**
  *
- * @author cleiton
+ * @author Aristides
  */
 
 public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
         
-        Graph g = new Graph();
-        BFS bfs = new BFS();
+        // teste com o grafo mais loco lá do exemplo do professor
         
-        g.addEdge((short)0, (short)1);
-        g.addEdge((short)0, (short)2);
-        g.addEdge((short)1, (short)0);
-        g.addEdge((short)1, (short)3);
-        g.addEdge((short)1, (short)5);
-        g.addEdge((short)2, (short)0);
-        g.addEdge((short)2, (short)4);
-        g.addEdge((short)3, (short)1);
-        //g.addEdge((short)3, (short)5);
-        g.addEdge((short)4, (short)2);
-        g.addEdge((short)4, (short)5);
-        g.addEdge((short)4, (short)6);
-        g.addEdge((short)5, (short)1);
-        g.addEdge((short)5, (short)3);
-        //g.addEdge((short)5, (short)4);
-        g.addEdge((short)5, (short)6);
-        g.addEdge((short)6, (short)5);
-        g.addEdge((short)6, (short)4);
+        Graph g = new Graph(new String[]{"0", "1", "2", "3", "4", "5", "6"});
+        BalancedDisjointPaths bjp = new BalancedDisjointPaths();
+        ArrayList<Vertex> lowerCycle;
+        String lblS;
+        
+        g.addEdge(g.vertices.get(0), g.vertices.get(1));
+        g.addEdge(g.vertices.get(0), g.vertices.get(2));
+        g.addEdge(g.vertices.get(1), g.vertices.get(0));
+        g.addEdge(g.vertices.get(1), g.vertices.get(3));
+        g.addEdge(g.vertices.get(1), g.vertices.get(5));
+        g.addEdge(g.vertices.get(2), g.vertices.get(0));
+        g.addEdge(g.vertices.get(2), g.vertices.get(4));
+        g.addEdge(g.vertices.get(3), g.vertices.get(1));
+        g.addEdge(g.vertices.get(3), g.vertices.get(5));
+        g.addEdge(g.vertices.get(4), g.vertices.get(2));
+        g.addEdge(g.vertices.get(4), g.vertices.get(5));
+        g.addEdge(g.vertices.get(4), g.vertices.get(6));
+        g.addEdge(g.vertices.get(5), g.vertices.get(1));
+        g.addEdge(g.vertices.get(5), g.vertices.get(3));
+        g.addEdge(g.vertices.get(5), g.vertices.get(4));
+        g.addEdge(g.vertices.get(5), g.vertices.get(6));
+        g.addEdge(g.vertices.get(6), g.vertices.get(5));
+        g.addEdge(g.vertices.get(6), g.vertices.get(4));
         
         System.out.println(g.toString());
         
-        short path[] = bfs.shortestPath(g, (short)3, (short)4);
+        lowerCycle = bjp.lowerCycleCommonVertices(g, g.vertices.get(3), g.vertices.get(4));
 
-        for (short i = 0; i < path.length; i++)
-            System.out.print(path[i] + " ");
-        System.out.println("");
-        
+        if (lowerCycle == null || lowerCycle.size() == 0)
+            System.out.println("Não encontrado caminho de s a t...");
+        else {
+            lblS = lowerCycle.get(0).label;
+            for (Vertex i : lowerCycle) {
+                if (i.label.equals(lblS))
+                    System.out.print("\n");
+                else
+                    System.out.print(" ");
+                System.out.print(i.label);
+            }
+            System.out.println("");
+        }
     }
     
 }

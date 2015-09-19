@@ -1,12 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package balanced.disjoint.paths;
 /**
  *
- * @author cleiton
+ * @author Aristides
  */
 
 import java.util.ArrayList;
@@ -16,11 +11,13 @@ public class Graph implements Cloneable {
     public ArrayList<Vertex> vertices;
     
     public Graph(short nVertices) {
-        vertices = new ArrayList<>(nVertices);
+        this.vertices = new ArrayList<>(nVertices);
     }
 
-    public Graph(string labels[]) {
-        vertices = new ArrayList<>(nVertices);
+    public Graph(String labels[]) {
+        this.vertices = new ArrayList<>();
+        for (String lbl : labels)
+            this.vertices.add(new Vertex(lbl));
     }
     
     public void addEdge(Vertex v, Vertex w) {
@@ -31,13 +28,12 @@ public class Graph implements Cloneable {
     public void removeVertex(Vertex u) {
         for (Vertex x : this.vertices)
             x.listOfAdjacency.remove(u);
+        this.vertices.remove(u);
     }
     
     public void removeEdge(Vertex u, Vertex w) {
         if (this.vertices.indexOf(u) >= 0)
             this.vertices.get(this.vertices.indexOf(u)).listOfAdjacency.remove(w);
-        if (this.vertices.indexOf(w) >= 0)
-            this.vertices.get(this.vertices.indexOf(w)).listOfAdjacency.remove(u);
     }
     
     @Override
