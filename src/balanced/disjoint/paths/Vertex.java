@@ -31,4 +31,29 @@ public class Vertex {
         this.prefer = false;
     }
     
+    public int indexOfNeighbour(String label) {
+        if (this.listOfAdjacency == null || this.listOfAdjacency.isEmpty())
+            return -1;
+        for (int i = 0; i < this.listOfAdjacency.size(); i++)
+            if (this.listOfAdjacency.get(i).label.equals(label))
+                return i;
+        return -1;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("L -> ");
+        sb.append(this.label);
+        sb.append(" N -> ");
+        for (Vertex v : this.listOfAdjacency) {
+            sb.append(v.label);
+            sb.append(" ");
+        }
+        sb.append("P -> ");
+        sb.append(this.prefer);
+        sb.append(" C -> ");
+        sb.append(this.stateColor);
+        return sb.toString();
+    }
 }
