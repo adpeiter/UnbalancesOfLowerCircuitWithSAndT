@@ -13,6 +13,7 @@ public class BalancedDisjointPaths {
     private Path path = new Path();
     
     public ArrayList<Vertex> balancedDisjointPaths(Graph g, Vertex s, Vertex t) {
+        
         /*
         aqui faremos A função que resolve nosso problema:
         - listar todos os caminhos entre s e t, que utilizem os vértices dos caminhos encontrados
@@ -23,7 +24,34 @@ public class BalancedDisjointPaths {
             caso em que temos dois pares (um mais e outro menos balanceado)
             do contrário, p1 e p2 serão o par mais e menos balanceado
         */
+        
+        ArrayList<Vertex> cycle;
+        ArrayList<Branch> branches = new ArrayList<>();
+        int i, j;
+        
+        cycle = lowerCycleEdgeDisjoint(g, s, t);
+        
+        /*  agora a ideia é encontrar os desvios
+            achar um vértice comum e percorrer os dois caminhos até confluirem num novo vértice comum
+            depois, temos que ver de todos os desvios quais são os mais interessantes
+            para alcançarmos o maior balanceamento
+            se houver um grupo de desvios cuja soma seja igual ao dobro do desbalanceamento dos caminhos
+            encontrados, basta fazer o caminho mais curto usar estes desvios, e o caminho mais longo usar as
+            ligações antes utilizadas pelo caminho mais curto
+            EX: se tivermos um par (a, b) com #A(a) = 10 e #A(b) = 5 e tivermos um desvio 2,
+            fazendo o caminho a utilizar este desvio e dando ao caminho b as arestas que eram utilizadas
+            por a, teremos #A(a) = 7 e #A(b) = 8, ou seja, o maior balanceamento possível
+        */
+        for (i = 1; i < cycle.size() && cycle.get(i).label != s.label; i++) {
+            
+            
+            
+        }
+        
+        
+        
         return null;
+        
     }
     
     public ArrayList<Vertex> lowerCycleEdgeDisjoint(Graph g, Vertex s, Vertex t) {
