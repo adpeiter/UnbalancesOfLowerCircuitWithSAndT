@@ -3,7 +3,7 @@ package balanced.disjoint.paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
+import java.lang.Math;
 /**
  *
  * @author Aristides
@@ -11,23 +11,16 @@ import java.util.Comparator;
 public class BalancedDisjointPaths {
 
     private Path path = new Path();
+    private ArrayList<Branch> effectiveSolution; 
     
-    public ArrayList<Vertex> balancedDisjointPaths(Graph g, Vertex s, Vertex t) {
+    @SuppressWarnings("empty-statement")
+    public ArrayList<ArrayList<Vertex>> balancedDisjointPaths(Graph g, Vertex s, Vertex t) {
         
-        /*
-        aqui faremos A função que resolve nosso problema:
-        - listar todos os caminhos entre s e t, que utilizem os vértices dos caminhos encontrados
-            pela função lowerCycleEdgeDisjoint
-        - ordenar estes caminhos por tamanho
-        - eliminar os caminhos que repetem aresta (do 2º em diante)
-        - verificar se existem p1, p2 e p3 e p4 tais que p1 < p2 <= p3 < p4 e p1 + p4 = p2 + p3, que é o
-            caso em que temos dois pares (um mais e outro menos balanceado)
-            do contrário, p1 e p2 serão o par mais e menos balanceado
-        */
-        
-        ArrayList<Vertex> cycle;
+        ArrayList<ArrayList<Vertex>> paths = new ArrayList<>();
+        ArrayList<Vertex> cycle, pathA, pathB;
         ArrayList<Branch> branches = new ArrayList<>();
-        int i, j;
+        Vertex w, u;
+        int i, idealBallance;
         
         cycle = lowerCycleEdgeDisjoint(g, s, t);
         
@@ -42,13 +35,86 @@ public class BalancedDisjointPaths {
             fazendo o caminho a utilizar este desvio e dando ao caminho b as arestas que eram utilizadas
             por a, teremos #A(a) = 7 e #A(b) = 8, ou seja, o maior balanceamento possível
         */
-        for (i = 1; i < cycle.size() && cycle.get(i).label != s.label; i++) {
-            
-            
-            
+        i = cycle.lastIndexOf(cycle.get(0));
+        pathA = new ArrayList<>();
+        pathB = new ArrayList<>();
+        for (Vertex a : cycle.subList(0, i)) {
+            pathA.add(a);
+        }
+        for (Vertex b : cycle.subList(i, cycle.size())) {
+            pathB.add(b);
         }
         
+        paths.add(pathA);
+        paths.add(pathB);
         
+        w = pathA.get(0);
+        for (i = 1; i < pathA.size(); i++) {
+            u = pathA.get(i);
+            if (pathB.indexOf(u) > -1) {
+                branches.add(new Branch(w, u, Math.abs(pathA.indexOf(w) - pathA.indexOf(u)), Math.abs(pathB.indexOf(w) - pathB.indexOf(u))));
+                w = u;
+            }
+        }
+        
+        if (branches.size() == 1) return paths;
+        
+        // aqui começa a confusão
+        ArrayList<Branch> tempBranches;
+        ArrayList<Vertex> pathC, pathD, tempBC, tempBD;
+        ArrayList<Branch> solution;
+        int bsPC, bePC, bsPD, bePD;
+
+        effectiveSolution = new ArrayList<>();;
+        solution = new ArrayList<>();
+        tempBranches = new ArrayList<>();
+        tempBC = new ArrayList<>();
+        tempBD = new ArrayList<>();
+        idealBallance = (cycle.size() - 2) / 2;
+        
+        while (idealBallance > 0) {
+            
+            tempBranches = (ArrayList<Branch>) branches.clone();
+            
+            // fazer o subset sum nos branches
+            // o Zazá n te deixa nem nas outras matérias :(
+            
+            subsetSum(tempBranches, 0, 0, Math.abs(pathA.size() - idealBallance - 1), solution);
+            if (effectiveSolution.size() > 0) {
+                
+                pathC = (ArrayList<Vertex>) pathA.clone();
+                pathD = (ArrayList<Vertex>) pathB.clone();
+            
+                // fazer as trocas entre os caminhos
+                for (Branch b : effectiveSolution) {
+                    
+                    bsPC = indexOfLabel(pathC, b.start.label);
+                    bsPD = indexOfLabel(pathD, b.start.label);
+                    bePC = indexOfLabel(pathC, b.end.label);
+                    bePD = indexOfLabel(pathD, b.end.label);    
+                    
+                    for (i = bsPC + 1; i < bePC; i++) {
+                        tempBC.add(pathC.get(i));
+                        pathC.remove(i);
+                    }
+                    for (i = bsPD + 1; i < bePD; i++) {
+                        tempBD.add(pathD.get(i));
+                        pathD.remove(i);
+                        
+                    }
+                    pathC.addAll(bsPC + 1, tempBD);
+                    pathD.addAll(bsPD + 1, tempBC);                    
+                }
+                
+                paths.add(pathC);
+                paths.add(pathD);
+                return paths;
+                
+            }
+            
+            idealBallance--;
+            
+        }
         
         return null;
         
@@ -102,7 +168,7 @@ public class BalancedDisjointPaths {
                 }
             }
             if (commonEdges.isEmpty()) // significa que não há mais arestas com extremidades em comum
-               break;
+                break;
         }
         
         return cycle;
@@ -152,4 +218,44 @@ public class BalancedDisjointPaths {
         return cycle;
         
     }
+    
+    private void subsetSum(
+        ArrayList<Branch> A, int currSum, int index, int sum,
+        ArrayList<Branch> solution
+    ) {
+	if (effectiveSolution.size() > 0)
+            return;
+        
+        if (solution == null)
+            solution = new ArrayList<>();
+        
+        if (currSum == sum) {
+            effectiveSolution = (ArrayList<Branch>) solution.clone();
+            return;
+        }
+
+        if (index == A.size()) {
+            solution.clear();
+            effectiveSolution.clear();
+            return;
+        }
+        
+        solution.add(A.get(index));// select the element
+	currSum += Math.abs(A.get(index).sizeA - A.get(index).sizeB);
+	subsetSum(A, currSum, index + 1, sum, solution);
+        solution.remove(A.get(index));// do not select the element
+	currSum -= Math.abs(A.get(index).sizeA - A.get(index).sizeB);
+	subsetSum(A, currSum, index + 1, sum, solution);
+	
+    }
+    
+    int indexOfLabel(ArrayList<Vertex> a, String label) {
+        
+        for (int i = 0; i < a.size(); i++)
+            if (a.get(i).label.equals(label))
+                return i;
+        
+        return -1;
+    }
+
 }

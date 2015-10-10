@@ -5,6 +5,8 @@
  */
 package balanced.disjoint.paths;
 
+import java.util.ArrayList;
+import java.lang.Math;
 /**
  *
  * @author Aristides
@@ -13,12 +15,19 @@ public class Branch {
 
     Vertex start;
     Vertex end;
-    int size;
+    int sizeA;
+    int sizeB;
     
-    Branch(Vertex start, Vertex end, int size) {
+    Branch(Vertex start, Vertex end, int sizeA, int sizeB) {
         this.start = start;
         this.end = end;
-        this.size = size;
+        this.sizeA = sizeA;
+        this.sizeB = sizeB;
+    }
+    
+    @Override
+    public String toString() {
+        return this.start.label + "-" + this.end.label + "(" + this.sizeA + "," + this.sizeB + ")";
     }
     
 }

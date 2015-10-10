@@ -13,66 +13,62 @@ public class Main {
         
         // teste com o grafo mais loco lá do exemplo do professor
         
-        //Graph g = new Graph(new String[]{"0", "1", "2", "3", "4", "5", "6"});
-        Graph g = new Graph(new String[]{"0", "1", "2", "3", "4", "5", "6", "7"});
+        Graph g = new Graph(new String[]{"0", "1", "2", "3", "4", "5", "6"});
+        //Graph g = new Graph(new String[]{"0", "1", "2", "3", "4", "5", "6", "7"});
         BalancedDisjointPaths bjp = new BalancedDisjointPaths();
-        ArrayList<Vertex> balancedDisjointPaths;
+        ArrayList<ArrayList<Vertex>> balancedDisjointPaths;
         String lblS;
         
-//        g.addEdge(g.vertices.get(0), g.vertices.get(1));
-//        g.addEdge(g.vertices.get(0), g.vertices.get(2));
-//        g.addEdge(g.vertices.get(1), g.vertices.get(0));
-//        g.addEdge(g.vertices.get(1), g.vertices.get(3));
-//        g.addEdge(g.vertices.get(1), g.vertices.get(5));
-//        g.addEdge(g.vertices.get(2), g.vertices.get(0));
-//        g.addEdge(g.vertices.get(2), g.vertices.get(4));
-//        g.addEdge(g.vertices.get(3), g.vertices.get(1));
-//        g.addEdge(g.vertices.get(3), g.vertices.get(5));
-//        g.addEdge(g.vertices.get(4), g.vertices.get(2));
-//        g.addEdge(g.vertices.get(4), g.vertices.get(5));
-//        g.addEdge(g.vertices.get(4), g.vertices.get(6));
-//        g.addEdge(g.vertices.get(5), g.vertices.get(1));
-//        g.addEdge(g.vertices.get(5), g.vertices.get(3));
-//        g.addEdge(g.vertices.get(5), g.vertices.get(4));
-//        g.addEdge(g.vertices.get(5), g.vertices.get(6));
-//        g.addEdge(g.vertices.get(6), g.vertices.get(5));
-//        g.addEdge(g.vertices.get(6), g.vertices.get(4));
-        
         g.addEdge(g.vertices.get(0), g.vertices.get(1));
-        g.addEdge(g.vertices.get(0), g.vertices.get(6));
+        g.addEdge(g.vertices.get(0), g.vertices.get(2));
         g.addEdge(g.vertices.get(1), g.vertices.get(0));
-        g.addEdge(g.vertices.get(1), g.vertices.get(2));
-        g.addEdge(g.vertices.get(1), g.vertices.get(4));
-        g.addEdge(g.vertices.get(2), g.vertices.get(1));
-        g.addEdge(g.vertices.get(2), g.vertices.get(3));
-        g.addEdge(g.vertices.get(2), g.vertices.get(7));
-        g.addEdge(g.vertices.get(3), g.vertices.get(2));
+        g.addEdge(g.vertices.get(1), g.vertices.get(3));
+        g.addEdge(g.vertices.get(1), g.vertices.get(5));
+        g.addEdge(g.vertices.get(2), g.vertices.get(0));
+        g.addEdge(g.vertices.get(2), g.vertices.get(4));
+        g.addEdge(g.vertices.get(3), g.vertices.get(1));
         g.addEdge(g.vertices.get(3), g.vertices.get(5));
-        g.addEdge(g.vertices.get(4), g.vertices.get(1));
+        g.addEdge(g.vertices.get(4), g.vertices.get(2));
         g.addEdge(g.vertices.get(4), g.vertices.get(5));
+        g.addEdge(g.vertices.get(4), g.vertices.get(6));
+        g.addEdge(g.vertices.get(5), g.vertices.get(1));
         g.addEdge(g.vertices.get(5), g.vertices.get(3));
         g.addEdge(g.vertices.get(5), g.vertices.get(4));
-        g.addEdge(g.vertices.get(6), g.vertices.get(0));
-        g.addEdge(g.vertices.get(6), g.vertices.get(7));
-        g.addEdge(g.vertices.get(7), g.vertices.get(6));
-        g.addEdge(g.vertices.get(7), g.vertices.get(2));
+        g.addEdge(g.vertices.get(5), g.vertices.get(6));
+        g.addEdge(g.vertices.get(6), g.vertices.get(5));
+        g.addEdge(g.vertices.get(6), g.vertices.get(4));
+        
+//        g.addEdge(g.vertices.get(0), g.vertices.get(1));
+//        g.addEdge(g.vertices.get(0), g.vertices.get(6));
+//        g.addEdge(g.vertices.get(1), g.vertices.get(0));
+//        g.addEdge(g.vertices.get(1), g.vertices.get(2));
+//        g.addEdge(g.vertices.get(1), g.vertices.get(4));
+//        g.addEdge(g.vertices.get(2), g.vertices.get(1));
+//        g.addEdge(g.vertices.get(2), g.vertices.get(3));
+//        g.addEdge(g.vertices.get(2), g.vertices.get(7));
+//        g.addEdge(g.vertices.get(3), g.vertices.get(2));
+//        g.addEdge(g.vertices.get(3), g.vertices.get(5));
+//        g.addEdge(g.vertices.get(4), g.vertices.get(1));
+//        g.addEdge(g.vertices.get(4), g.vertices.get(5));
+//        g.addEdge(g.vertices.get(5), g.vertices.get(3));
+//        g.addEdge(g.vertices.get(5), g.vertices.get(4));
+//        g.addEdge(g.vertices.get(6), g.vertices.get(0));
+//        g.addEdge(g.vertices.get(6), g.vertices.get(7));
+//        g.addEdge(g.vertices.get(7), g.vertices.get(6));
+//        g.addEdge(g.vertices.get(7), g.vertices.get(2));
 
         System.out.println(g.toString());
         
-        balancedDisjointPaths = bjp.lowerCycleEdgeDisjoint(g, g.vertices.get(0), g.vertices.get(3));
+        balancedDisjointPaths = bjp.balancedDisjointPaths(g, g.vertices.get(3), g.vertices.get(4));
 
         if (balancedDisjointPaths == null || balancedDisjointPaths.isEmpty())
             System.out.println("Não encontrado caminho de s a t...");
         else {
-            lblS = balancedDisjointPaths.get(0).label;
-            for (Vertex i : balancedDisjointPaths) {
-                if (i.label.equals(lblS))
-                    System.out.print("\n");
-                else
-                    System.out.print(" ");
-                System.out.print(i.label);
+            for (ArrayList<Vertex> arr : balancedDisjointPaths) {
+                for (Vertex i : arr)
+                    System.out.print(i.label + " ");
+                System.out.print("\n");
             }
-            System.out.println("");
         }
     }
     
