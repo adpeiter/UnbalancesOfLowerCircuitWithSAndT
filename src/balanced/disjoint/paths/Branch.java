@@ -27,7 +27,7 @@ public class Branch {
     
     @Override
     public String toString() {
-        return this.start.label + "-" + this.end.label + "(" + this.sizeA + "," + this.sizeB + ")";
+        return this.start.label + "-" + this.end.label + " (" + this.sizeA + "," + this.sizeB + ")";
     }
     
 }

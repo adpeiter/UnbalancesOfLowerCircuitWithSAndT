@@ -24,8 +24,11 @@ public class BalancedDisjointPaths {
         
         cycle = lowerCycleEdgeDisjoint(g, s, t);
         
-        /*  agora a ideia é encontrar os desvios
-            achar um vértice comum e percorrer os dois caminhos até confluirem num novo vértice comum
+        /*  depois de calcular o menor ciclo (menor par de caminhos)
+            a ideia é encontrar desvios, se existirem
+            achar um vértice comum e percorrer os dois caminhos até a confluência num novo vértice comum
+            sempre haverá pelo menos 1 desvio, com origem em s e destino em, portanto, nosso interesse
+            está em encontrar desvios que envolvam vértices intermediários 
             depois, temos que ver de todos os desvios quais são os mais interessantes
             para alcançarmos o maior balanceamento
             se houver um grupo de desvios cuja soma seja igual ao dobro do desbalanceamento dos caminhos
@@ -38,6 +41,7 @@ public class BalancedDisjointPaths {
         i = cycle.lastIndexOf(cycle.get(0));
         pathA = new ArrayList<>();
         pathB = new ArrayList<>();
+        
         for (Vertex a : cycle.subList(0, i)) {
             pathA.add(a);
         }
@@ -57,66 +61,67 @@ public class BalancedDisjointPaths {
             }
         }
         
-        if (branches.size() == 1) return paths;
+        if (branches.size() > 1) {
         
-        // aqui começa a confusão
-        ArrayList<Branch> tempBranches;
-        ArrayList<Vertex> pathC, pathD, tempBC, tempBD;
-        ArrayList<Branch> solution;
-        int bsPC, bePC, bsPD, bePD;
+            // aqui começa a confusão
+            ArrayList<Branch> tempBranches;
+            ArrayList<Vertex> pathC, pathD, tempBC, tempBD;
+            ArrayList<Branch> solution;
+            int bsPC, bePC, bsPD, bePD;
 
-        effectiveSolution = new ArrayList<>();;
-        solution = new ArrayList<>();
-        tempBranches = new ArrayList<>();
-        tempBC = new ArrayList<>();
-        tempBD = new ArrayList<>();
-        idealBallance = (cycle.size() - 2) / 2;
-        
-        while (idealBallance > 0) {
-            
-            tempBranches = (ArrayList<Branch>) branches.clone();
-            
-            // fazer o subset sum nos branches
-            // o Zazá n te deixa nem nas outras matérias :(
-            
-            subsetSum(tempBranches, 0, 0, Math.abs(pathA.size() - idealBallance - 1), solution);
-            if (effectiveSolution.size() > 0) {
-                
-                pathC = (ArrayList<Vertex>) pathA.clone();
-                pathD = (ArrayList<Vertex>) pathB.clone();
-            
-                // fazer as trocas entre os caminhos
-                for (Branch b : effectiveSolution) {
-                    
-                    bsPC = indexOfLabel(pathC, b.start.label);
-                    bsPD = indexOfLabel(pathD, b.start.label);
-                    bePC = indexOfLabel(pathC, b.end.label);
-                    bePD = indexOfLabel(pathD, b.end.label);    
-                    
-                    for (i = bsPC + 1; i < bePC; i++) {
-                        tempBC.add(pathC.get(i));
-                        pathC.remove(i);
+            effectiveSolution = new ArrayList<>();;
+            solution = new ArrayList<>();
+            tempBranches = new ArrayList<>();
+            tempBC = new ArrayList<>();
+            tempBD = new ArrayList<>();
+            idealBallance = (cycle.size() - 2) / 2;
+
+            while (idealBallance > 0) {
+
+                tempBranches = (ArrayList<Branch>) branches.clone();
+
+                // fazer o subset sum nos branches
+                // o Zazá n te deixa nem nas outras matérias :(
+
+                subsetSum(tempBranches, 0, 0, Math.abs(pathA.size() - idealBallance - 1), solution);
+                if (effectiveSolution.size() > 0) {
+
+                    pathC = (ArrayList<Vertex>) pathA.clone();
+                    pathD = (ArrayList<Vertex>) pathB.clone();
+
+                    // fazer as trocas entre os caminhos
+                    for (Branch b : effectiveSolution) {
+
+                        bsPC = indexOfLabel(pathC, b.start.label);
+                        bsPD = indexOfLabel(pathD, b.start.label);
+                        bePC = indexOfLabel(pathC, b.end.label);
+                        bePD = indexOfLabel(pathD, b.end.label);    
+
+                        for (i = bsPC + 1; i < bePC; i++) {
+                            tempBC.add(pathC.get(i));
+                            pathC.remove(i);
+                        }
+                        for (i = bsPD + 1; i < bePD; i++) {
+                            tempBD.add(pathD.get(i));
+                            pathD.remove(i);
+
+                        }
+                        pathC.addAll(bsPC + 1, tempBD);
+                        pathD.addAll(bsPD + 1, tempBC);                    
                     }
-                    for (i = bsPD + 1; i < bePD; i++) {
-                        tempBD.add(pathD.get(i));
-                        pathD.remove(i);
-                        
-                    }
-                    pathC.addAll(bsPC + 1, tempBD);
-                    pathD.addAll(bsPD + 1, tempBC);                    
+
+                    paths.add(pathC);
+                    paths.add(pathD);
+                    idealBallance = 0;
+
                 }
-                
-                paths.add(pathC);
-                paths.add(pathD);
-                return paths;
-                
+                effectiveSolution.clear();
+                idealBallance--;
+
             }
-            
-            idealBallance--;
-            
         }
         
-        return null;
+        return paths;
         
     }
     

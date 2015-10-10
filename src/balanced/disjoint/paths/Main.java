@@ -67,7 +67,7 @@ public class Main {
             for (ArrayList<Vertex> arr : balancedDisjointPaths) {
                 for (Vertex i : arr)
                     System.out.print(i.label + " ");
-                System.out.print("\n");
+                System.out.print("(" + (arr.size() - 1) + ")\n");
             }
         }
     }
