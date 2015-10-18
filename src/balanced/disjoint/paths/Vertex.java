@@ -21,14 +21,14 @@ public class Vertex {
     Vertex parent;
     // inicialmente usado para ordenar as listas de adjacências
     // se deve dar preferência para os nós que já estão no caminho descoberto anteriormente
-    boolean prefer;
+    int prefer;
     
     Vertex(String label){
         this.label = label;
         this.listOfAdjacency = new ArrayList<>();
         this.stateColor = StateColor.White;
         this.parent = null;
-        this.prefer = false;
+        this.prefer = 0;
     }
     
     public int indexOfNeighbour(String label) {
