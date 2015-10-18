@@ -105,7 +105,7 @@ public class BalancedDisjointPaths {
             tempBD = new ArrayList<>();
             idealBallance = (cycle.size() - 2) / 2;
 
-            while (idealBallance > 0) {
+            while (idealBallance > 0 && Math.abs(pathA.size() - idealBallance - 1) > 0) {
 
                 tempBranches = (ArrayList<Branch>) branches.clone();
 
