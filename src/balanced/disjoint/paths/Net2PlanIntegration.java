@@ -31,24 +31,50 @@ public class Net2PlanIntegration implements IAlgorithm{
         
         if(N == 0 || E == 0) throw new Net2PlanException("É preciso possuir Nodes e Link na sua topologia.");
         
-        final int nodeInicio = Integer.parseInt(algorithmParameters.get("Inicio"));
-        final int nodeFim    = Integer.parseInt(algorithmParameters.get("Fim"));
+        int nodeInicio, nodeFim;
         
-        if(nodeInicio < 0 || nodeFim < 0) throw new Net2PlanException("Os Valores dos parametros precisão ser positivos!");
+        try {
+            nodeInicio = Integer.parseInt(algorithmParameters.get("Inicio"));
+            nodeFim = Integer.parseInt(algorithmParameters.get("Fim"));
+        }
+        catch (Exception e) {
+            nodeInicio = -1;
+            nodeFim = -1;
+        }
+                
+        //if(nodeInicio < 0 || nodeFim < 0) throw new Net2PlanException("Os Valores dos parametros precisão ser positivos!");
         
         Graph graph = makeGraph(getLinkGraphNet2Plan(netPlan), netPlan);
         
-        //Executa algoritimo Balanced Disjoint Paths
-        balancedDisjointPaths = bjp(graph, nodeInicio, nodeFim);
+        ArrayList<int[]> pairs = new ArrayList<>();
         
-        if (balancedDisjointPaths == null || balancedDisjointPaths.isEmpty())
-            throw new Net2PlanException("Não encontrado caminho do Vertice de Inicio a Fim");
+        
+        if (nodeInicio + nodeFim == -2) {
+            for (Vertex v : graph.vertices)
+                for (Vertex u : graph.vertices) {
+                    int pair[] = {Integer.parseInt(v.label), Integer.parseInt(u.label)}; 
+                    pairs.add(pair);
+                }
+        }
         else {
-            for (ArrayList<Vertex> arr : balancedDisjointPaths) {
-                for (Vertex i : arr)
-                    System.out.print(i.label + " ");
-                System.out.print("(" + (arr.size() - 1) + ")\n");
+            int pair[] = {nodeInicio, nodeFim}; 
+            pairs.add(pair);
+        }
+        
+        for (int k = 0; k < pairs.size()-1; k++ ) {
+            //Executa algoritimo Balanced Disjoint Paths
+            balancedDisjointPaths = bjp(graph, pairs.get(k)[0], pairs.get(k)[1]);
+
+            if (balancedDisjointPaths == null || balancedDisjointPaths.isEmpty())
+                throw new Net2PlanException("Não encontrado caminho do Vertice de Inicio a Fim");
+            else {
+                for (ArrayList<Vertex> arr : balancedDisjointPaths) {
+                    for (Vertex i : arr)
+                        System.out.print(i.label + " ");
+                    System.out.print("(" + (arr.size() - 1) + ")\n");
+                }
             }
+            
         }
         
         return "OK";
@@ -56,7 +82,12 @@ public class Net2PlanIntegration implements IAlgorithm{
 
     @Override
     public String getDescription() {
-        return "Criar alguma descricao...";
+        return "Este algoritmo encontra, caso existam, dois pares A e B de caminhos disjuntos entre si"
+                + " de uma origem s a um destino t, sendo o comprimento de A igual ao comprimento de B,"
+                + " com a diferença de tamanho entre os caminhos de A maior que a dos caminhos de B..."
+                + " Caso não existirem tais pares, o algoritmo encontra apenas os dois menores caminhos"
+                + " disjuntos de s a t. Por fim, se não houver sequer estes dois caminhos, o algoritmo"
+                + " informa que a rede não é 2-aresta-conexa...";
     }
 
     @Override
@@ -77,6 +108,7 @@ public class Net2PlanIntegration implements IAlgorithm{
         for(int i = 0; i < nodesId.length; i++){
             nodes[i] = String.valueOf(nodesId[i]);
         }
+
         return nodes;
     }
     
@@ -84,14 +116,14 @@ public class Net2PlanIntegration implements IAlgorithm{
         Graph g = new Graph(nodes);
         
         //Para cada  link do net2plan é criado arestas do grafo
-        for(int i = 0; i < netPlan.getNumberOfLinks(); i++){
+        for(long i : netPlan.getLinkIdsVector()){
             
             //Retorna o vertice de origem e destino do Link
             Pair<Long,Long> p = netPlan.getLinkOriginDestinationNodePair(i);
             
             g.addEdge(
-                g.vertices.get(Integer.valueOf(p.getFirst().toString() )), 
-                g.vertices.get(Integer.valueOf(p.getSecond().toString() ))
+                g.vertices.get(g.indexOf(p.getFirst().toString())), 
+                g.vertices.get(g.indexOf(p.getSecond().toString()))
             );
         }
         

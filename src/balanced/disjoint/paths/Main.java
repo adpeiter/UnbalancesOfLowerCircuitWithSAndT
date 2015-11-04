@@ -103,7 +103,7 @@ public class Main {
             g.addEdge(g.vertices.get(7), g.vertices.get(6));
             g.addEdge(g.vertices.get(7), g.vertices.get(2));
             
-            System.out.println(g.toString());    
+            System.out.println(g.toString());
             balancedDisjointPaths = bjp.balancedDisjointPaths(g, g.vertices.get(0), g.vertices.get(8));
         }
         
