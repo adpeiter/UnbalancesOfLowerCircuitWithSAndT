@@ -130,6 +130,8 @@ public class BalancedDisjointPaths {
                         bePC = indexOfLabel(pathC, b.end.label);
                         bePD = indexOfLabel(pathD, b.end.label);    
 
+                        // alterar... o vértice não pode ser indexado por i, deve ser iterado na coleção
+                        
                         for (i = bsPC + 1; i < bePC; i++) {
                             tempBC.add(pathC.get(i));
                             pathC.remove(i);

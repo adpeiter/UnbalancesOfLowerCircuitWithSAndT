@@ -13,7 +13,7 @@ public class Main {
         
         // teste com o grafo mais loco lá do exemplo do professor
         
-        final int graph = 1;
+        final int graph = 2;
         
         Graph g;
         //Graph g = new Graph(new String[]{"0", "1", "2", "3", "4", "5", "6", "7"});
@@ -55,6 +55,16 @@ public class Main {
             System.out.println(g.toString());
             balancedDisjointPaths = bjp.balancedDisjointPaths(g, g.vertices.get(0), g.vertices.get(8));
             
+            if (balancedDisjointPaths == null || balancedDisjointPaths.isEmpty())
+                System.out.println("Não encontrado caminho de s a t...");
+            else {
+                for (ArrayList<Vertex> arr : balancedDisjointPaths) {
+                    for (Vertex i : arr)
+                        System.out.print(i.label + " ");
+                    System.out.print("(" + (arr.size() - 1) + ")\n");
+                }
+            }
+            
         }
         else if (graph == 2) {
         
@@ -79,8 +89,24 @@ public class Main {
             g.addEdge(g.vertices.get(6), g.vertices.get(4));
             
             System.out.println(g.toString());
-            balancedDisjointPaths = bjp.balancedDisjointPaths(g, g.vertices.get(4), g.vertices.get(3));
             
+            for (int s = 0; s <= 6; s++) {
+                for (int t = 0; t <= 6; t++) {
+                    if (s != t) {
+                        System.out.println("Verificando " + s + " a " + t + "...");
+                        balancedDisjointPaths = bjp.balancedDisjointPaths(g, g.vertices.get(s), g.vertices.get(t));
+                        if (balancedDisjointPaths == null || balancedDisjointPaths.isEmpty())
+                            System.out.println("Não encontrado caminho de s a t...");
+                        else {
+                            for (ArrayList<Vertex> arr : balancedDisjointPaths) {
+                                for (Vertex i : arr)
+                                    System.out.print(i.label + " ");
+                                System.out.print("(" + (arr.size() - 1) + ")\n");
+                            }
+                        }
+                    }
+                }
+            }
         }
         else if (graph == 3) {
         
@@ -105,18 +131,19 @@ public class Main {
             
             System.out.println(g.toString());
             balancedDisjointPaths = bjp.balancedDisjointPaths(g, g.vertices.get(0), g.vertices.get(8));
+            
+            if (balancedDisjointPaths == null || balancedDisjointPaths.isEmpty())
+                System.out.println("Não encontrado caminho de s a t...");
+            else {
+                for (ArrayList<Vertex> arr : balancedDisjointPaths) {
+                    for (Vertex i : arr)
+                        System.out.print(i.label + " ");
+                    System.out.print("(" + (arr.size() - 1) + ")\n");
+                }
+            }
+            
         }
         
-
-        if (balancedDisjointPaths == null || balancedDisjointPaths.isEmpty())
-            System.out.println("Não encontrado caminho de s a t...");
-        else {
-            for (ArrayList<Vertex> arr : balancedDisjointPaths) {
-                for (Vertex i : arr)
-                    System.out.print(i.label + " ");
-                System.out.print("(" + (arr.size() - 1) + ")\n");
-            }
-        }
     }
     
 }

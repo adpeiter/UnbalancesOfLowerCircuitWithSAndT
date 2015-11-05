@@ -36,10 +36,12 @@ public class Net2PlanIntegration implements IAlgorithm{
         try {
             nodeInicio = Integer.parseInt(algorithmParameters.get("Inicio"));
             nodeFim = Integer.parseInt(algorithmParameters.get("Fim"));
+            System.out.print("testando apenas um par\n");
         }
         catch (Exception e) {
             nodeInicio = -1;
             nodeFim = -1;
+            System.out.print("testando de todos para todos\n");
         }
                 
         //if(nodeInicio < 0 || nodeFim < 0) throw new Net2PlanException("Os Valores dos parametros precisão ser positivos!");
@@ -47,13 +49,14 @@ public class Net2PlanIntegration implements IAlgorithm{
         Graph graph = makeGraph(getLinkGraphNet2Plan(netPlan), netPlan);
         
         ArrayList<int[]> pairs = new ArrayList<>();
-        
-        
+
         if (nodeInicio + nodeFim == -2) {
             for (Vertex v : graph.vertices)
                 for (Vertex u : graph.vertices) {
-                    int pair[] = {Integer.parseInt(v.label), Integer.parseInt(u.label)}; 
-                    pairs.add(pair);
+                    if (!v.label.equals(u.label)) {
+                        int pair[] = {Integer.parseInt(v.label), Integer.parseInt(u.label)}; 
+                        pairs.add(pair);
+                    }
                 }
         }
         else {
@@ -61,7 +64,9 @@ public class Net2PlanIntegration implements IAlgorithm{
             pairs.add(pair);
         }
         
-        for (int k = 0; k < pairs.size()-1; k++ ) {
+        System.out.println("quantidade de pares: " + pairs.size());
+        
+        for (int k = 0; k < pairs.size(); k++ ) {
             //Executa algoritimo Balanced Disjoint Paths
             balancedDisjointPaths = bjp(graph, pairs.get(k)[0], pairs.get(k)[1]);
 
