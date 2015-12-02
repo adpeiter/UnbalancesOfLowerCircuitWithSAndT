@@ -96,7 +96,7 @@ public class BalancedDisjointPaths {
             ArrayList<Branch> tempBranches;
             ArrayList<Vertex> pathC, pathD, tempBC, tempBD;
             ArrayList<Branch> solution;
-            int bsPC, bePC, bsPD, bePD;
+            int ixsPathC, ixsPathD;
 
             effectiveSolution = new ArrayList<>();;
             solution = new ArrayList<>();
@@ -125,24 +125,30 @@ public class BalancedDisjointPaths {
 
                         if (b.sizeA == b.sizeB) continue;
                         
-                        bsPC = indexOfLabel(pathC, b.start.label);
-                        bsPD = indexOfLabel(pathD, b.start.label);
-                        bePC = indexOfLabel(pathC, b.end.label);
-                        bePD = indexOfLabel(pathD, b.end.label);    
-
+                        ixsPathC = indexOfLabel(pathC, b.start.label);
+                        ixsPathD = indexOfLabel(pathD, b.start.label);
+                        
+                        //System.out.println("\nTrocando o desvio " + b.start.label + " a " + b.end.label);
+                        
                         // alterar... o vértice não pode ser indexado por i, deve ser iterado na coleção
                         
-                        for (i = bsPC + 1; i < bePC; i++) {
-                            tempBC.add(pathC.get(i));
-                            pathC.remove(i);
-                        }
-                        for (i = bsPD + 1; i < bePD; i++) {
-                            tempBD.add(pathD.get(i));
-                            pathD.remove(i);
+                        //System.out.println("\ndesvio de a:");
+                        while (!pathC.get(ixsPathC + 1).label.equals(b.end.label)) {
+                            tempBC.add(pathC.get(ixsPathC + 1));
+                        //    System.out.print(" " + pathC.get(ixsPathC + 1).label);
+                            pathC.remove(ixsPathC + 1);
+                        }                   
 
-                        }
-                        pathC.addAll(bsPC + 1, tempBD);
-                        pathD.addAll(bsPD + 1, tempBC);
+                        //System.out.println("\ndesvio de b:");
+                        while (!pathD.get(ixsPathD + 1).label.equals(b.end.label)) {
+                            tempBD.add(pathD.get(ixsPathD + 1));
+                        //    System.out.print(" " + pathD.get(ixsPathD + 1).label);
+                            pathD.remove(ixsPathD + 1);
+                        }                   
+                        //System.out.print("\n");
+                                                
+                        pathC.addAll(ixsPathC + 1, tempBD);
+                        pathD.addAll(ixsPathD + 1, tempBC);
                         tempBC.clear();
                         tempBD.clear();
                         
@@ -171,9 +177,11 @@ public class BalancedDisjointPaths {
         Graph gTemp;
         ArrayList<Vertex> cycle;
         ArrayList<Vertex[]> commonEdges = new ArrayList<>();
-        int ixPath2, ixVertexX, ixVertexR;
+        int ixPath2, ixVertexX, ixVertexR, pvceSize;
         Vertex x, r;
 
+        pvceSize = 0;
+        
         while (true) {
             
             gTemp = g.copyOf(); // copia o grafo
@@ -191,7 +199,7 @@ public class BalancedDisjointPaths {
                 gTemp.vertices.get(ixVertexX).listOfAdjacency.remove(ixVertexR);
             }
 
-            commonEdges.clear();
+            //commonEdges.clear();
             
             // calcula o menor ciclo com x e r
             cycle = lowerCycle(gTemp, x, r);
@@ -211,8 +219,9 @@ public class BalancedDisjointPaths {
                     }
                 }
             }
-            if (commonEdges.isEmpty()) // significa que não há mais arestas com extremidades em comum
+            if (commonEdges.size() == pvceSize) // significa que não há mais arestas com extremidades em comum
                 break;
+            pvceSize = commonEdges.size();
         }
         
         return cycle;

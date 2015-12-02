@@ -24,12 +24,6 @@ public class Graph {
             this.vertices.add(new Vertex(lbl));
     }
     
-//    public Graph(Path fileName) throws FileNotFoundException, IOException {
-//        ArrayList<String> graph;
-//        graph = new ArrayList<>(Files.readAllLines((java.nio.file.Path) fileName));
-//        
-//    }
-    
     public void addEdge(Vertex v, Vertex w) {
         if (this.vertices.indexOf(v) >= 0)
             this.vertices.get(this.vertices.indexOf(v)).listOfAdjacency.add(w);
