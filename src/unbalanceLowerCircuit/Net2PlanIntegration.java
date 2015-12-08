@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package balanced.disjoint.paths;
+package unbalanceLowerCircuit;
 
 import com.net2plan.interfaces.networkDesign.IAlgorithm;
-import com.net2plan.interfaces.networkDesign.IReport;
 import com.net2plan.interfaces.networkDesign.Net2PlanException;
 import com.net2plan.interfaces.networkDesign.NetPlan;
 import com.net2plan.utils.Pair;
@@ -25,6 +24,7 @@ public class Net2PlanIntegration implements IAlgorithm{
     @Override
     public String executeAlgorithm(NetPlan netPlan, Map<String, String> algorithmParameters, Map<String, String> net2planParameters) {
         final int N, E;
+        String s, t; 
         ArrayList<ArrayList<Vertex>> balancedDisjointPaths;
         
         N = netPlan.getNumberOfNodes();
@@ -32,28 +32,41 @@ public class Net2PlanIntegration implements IAlgorithm{
         
         if(N == 0 || E == 0) throw new Net2PlanException("It must possess Nodes and Link in the topology.");
         
-        int nodeInicio, nodeFim;
+        int nodeStart, nodeEnd;
         
+        nodeStart = 0;
+        nodeEnd = 0;
+        t = algorithmParameters.get("End");
+        s = algorithmParameters.get("Begin");
+            
         try {
-            nodeInicio = Integer.parseInt(algorithmParameters.get("Begin"));
-            nodeFim = Integer.parseInt(algorithmParameters.get("End"));
-            System.out.print("testing just a pair\n");
+            
+            if (s.equals("") && t.equals("")) {
+                nodeStart = -1;
+                nodeEnd = -1;
+                System.out.print("testing of all for all\n");
+            }
+            else if (s.matches("\\d+") == false || t.matches("\\d+") == false) {
+               return "input numeric values or leave blank\n";
+            }
+            else {
+                nodeStart = Integer.parseInt(s);
+                nodeEnd = Integer.parseInt(t);
+                System.out.print("testing just a pair\n");
+            }
         }
         catch (Exception e) {
-            nodeInicio = -1;
-            nodeFim = -1;
-            System.out.print("testing of all for all\n");
+            return "Fail: don't can run...\n";
         }
-                
-        //if(nodeInicio < 0 || nodeFim < 0) throw new Net2PlanException("Os Valores dos parametros precisão ser positivos!");
         
         Graph graph = makeGraph(getLinkGraphNet2Plan(netPlan), netPlan);
         
         ArrayList<int[]> pairs = new ArrayList<>();
 
-        if (nodeInicio + nodeFim == -2) {
+        if (nodeStart + nodeEnd == -2) {
+            
             for (Vertex v : graph.vertices)
-                for (Vertex u : graph.vertices) {
+                for (Vertex u : graph.vertices.subList(graph.indexOf(v.label) + 1, graph.vertices.size() - 1)) {
                     if (!v.label.equals(u.label)) {
                         int pair[] = {Integer.parseInt(v.label), Integer.parseInt(u.label)}; 
                         pairs.add(pair);
@@ -61,7 +74,10 @@ public class Net2PlanIntegration implements IAlgorithm{
                 }
         }
         else {
-            int pair[] = {nodeInicio, nodeFim}; 
+            if (graph.indexOf(s) < 0 || graph.indexOf(t) < 0) {
+                return "Choose a exsisting node...\n";
+            }
+            int pair[] = {nodeStart, nodeEnd}; 
             pairs.add(pair);
         }
         
@@ -141,9 +157,9 @@ public class Net2PlanIntegration implements IAlgorithm{
     
     private ArrayList<ArrayList<Vertex>> bjp(Graph graph, int inicio, int fim){
         ArrayList<ArrayList<Vertex>> balancedDisjointPaths;
-        BalancedDisjointPaths bjp = new BalancedDisjointPaths();
+        UnbalanceLowerCircuit ulc = new UnbalanceLowerCircuit();
         
-        balancedDisjointPaths = bjp.balancedDisjointPaths(graph, graph.vertices.get(inicio), graph.vertices.get(fim));
+        balancedDisjointPaths = ulc.unbalancesOfLowerCircuitWithSAndT(graph, graph.vertices.get(inicio), graph.vertices.get(fim));
         
         return balancedDisjointPaths;
     }    

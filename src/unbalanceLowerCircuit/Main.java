@@ -1,4 +1,4 @@
-package balanced.disjoint.paths;
+package unbalanceLowerCircuit;
 
 import java.util.ArrayList;
 
@@ -13,12 +13,12 @@ public class Main {
         
         // teste com o grafo mais loco lá do exemplo do professor
         
-        final int graph = 0;
+        final int graph = 2;
         
         Graph g;
         //Graph g = new Graph(new String[]{"0", "1", "2", "3", "4", "5", "6", "7"});
-        BalancedDisjointPaths bjp = new BalancedDisjointPaths();
-        ArrayList<ArrayList<Vertex>> balancedDisjointPaths;
+        UnbalanceLowerCircuit ulc = new UnbalanceLowerCircuit();
+        ArrayList<ArrayList<Vertex>> unbalanceLowerCircuit;
         String lblS;
 
         if (graph == 0) {
@@ -45,12 +45,12 @@ public class Main {
             g.addEdge(g.vertices.get(8), g.vertices.get(7));
             g.addEdge(g.vertices.get(8), g.vertices.get(0));
             g.addEdge(g.vertices.get(8), g.vertices.get(3));
-            balancedDisjointPaths = bjp.balancedDisjointPaths(g, g.vertices.get(0), g.vertices.get(5));
+            unbalanceLowerCircuit = ulc.unbalancesOfLowerCircuitWithSAndT(g, g.vertices.get(0), g.vertices.get(5));
             
-            if (balancedDisjointPaths == null || balancedDisjointPaths.isEmpty())
+            if (unbalanceLowerCircuit == null || unbalanceLowerCircuit.isEmpty())
                 System.out.println("Não encontrado caminho de s a t...");
             else {
-                for (ArrayList<Vertex> arr : balancedDisjointPaths) {
+                for (ArrayList<Vertex> arr : unbalanceLowerCircuit) {
                     for (Vertex i : arr)
                         System.out.print(i.label + " ");
                     System.out.print("(" + (arr.size() - 1) + ")\n");
@@ -89,12 +89,12 @@ public class Main {
             g.addEdge(g.vertices.get(10), g.vertices.get(1));
             g.addEdge(g.vertices.get(10), g.vertices.get(2));
             System.out.println(g.toString());
-            balancedDisjointPaths = bjp.balancedDisjointPaths(g, g.vertices.get(0), g.vertices.get(8));
+            unbalanceLowerCircuit = ulc.unbalancesOfLowerCircuitWithSAndT(g, g.vertices.get(0), g.vertices.get(8));
             
-            if (balancedDisjointPaths == null || balancedDisjointPaths.isEmpty())
+            if (unbalanceLowerCircuit == null || unbalanceLowerCircuit.isEmpty())
                 System.out.println("Não encontrado caminho de s a t...");
             else {
-                for (ArrayList<Vertex> arr : balancedDisjointPaths) {
+                for (ArrayList<Vertex> arr : unbalanceLowerCircuit) {
                     for (Vertex i : arr)
                         System.out.print(i.label + " ");
                     System.out.print("(" + (arr.size() - 1) + ")\n");
@@ -130,11 +130,11 @@ public class Main {
                 for (int t = 0; t <= 6; t++) {
                     if (s != t) {
                         System.out.println("Verificando " + s + " a " + t + "...");
-                        balancedDisjointPaths = bjp.balancedDisjointPaths(g, g.vertices.get(s), g.vertices.get(t));
-                        if (balancedDisjointPaths == null || balancedDisjointPaths.isEmpty())
+                        unbalanceLowerCircuit = ulc.unbalancesOfLowerCircuitWithSAndT(g, g.vertices.get(s), g.vertices.get(t));
+                        if (unbalanceLowerCircuit == null || unbalanceLowerCircuit.isEmpty())
                             System.out.println("Não encontrado caminho de s a t...");
                         else {
-                            for (ArrayList<Vertex> arr : balancedDisjointPaths) {
+                            for (ArrayList<Vertex> arr : unbalanceLowerCircuit) {
                                 for (Vertex i : arr)
                                     System.out.print(i.label + " ");
                                 System.out.print("(" + (arr.size() - 1) + ")\n");
@@ -166,12 +166,12 @@ public class Main {
             g.addEdge(g.vertices.get(7), g.vertices.get(2));
             
             System.out.println(g.toString());
-            balancedDisjointPaths = bjp.balancedDisjointPaths(g, g.vertices.get(0), g.vertices.get(8));
+            unbalanceLowerCircuit = ulc.unbalancesOfLowerCircuitWithSAndT(g, g.vertices.get(0), g.vertices.get(8));
             
-            if (balancedDisjointPaths == null || balancedDisjointPaths.isEmpty())
+            if (unbalanceLowerCircuit == null || unbalanceLowerCircuit.isEmpty())
                 System.out.println("Não encontrado caminho de s a t...");
             else {
-                for (ArrayList<Vertex> arr : balancedDisjointPaths) {
+                for (ArrayList<Vertex> arr : unbalanceLowerCircuit) {
                     for (Vertex i : arr)
                         System.out.print(i.label + " ");
                     System.out.print("(" + (arr.size() - 1) + ")\n");

@@ -1,13 +1,9 @@
-package balanced.disjoint.paths;
+package unbalanceLowerCircuit;
 /**
  *
  * @author Aristides
  */
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 
 public class Graph {
