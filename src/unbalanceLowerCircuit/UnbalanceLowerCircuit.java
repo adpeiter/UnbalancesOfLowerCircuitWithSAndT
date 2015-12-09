@@ -14,13 +14,13 @@ public class UnbalanceLowerCircuit {
     private ArrayList<Branch> effectiveSolution; 
     
     @SuppressWarnings("empty-statement")
-    public ArrayList<ArrayList<Vertex>> unbalancesOfLowerCircuitWithSAndT(Graph g, Vertex s, Vertex t) {
+    public ArrayList<ArrayList<Vertex>> unballancesOfLowerCircuitWithSAndT(Graph g, Vertex s, Vertex t) {
              
         ArrayList<ArrayList<Vertex>> paths = new ArrayList<>();
         ArrayList<Vertex> circuit, pathA, pathB;
         ArrayList<Branch> branches = new ArrayList<>();
         Vertex w, u;
-        int i, idealBallance;
+        int i, idealUnbalance;
         
         circuit = lowerUndirectedCircuit(g, s, t);
         
@@ -61,13 +61,13 @@ public class UnbalanceLowerCircuit {
             solution = new ArrayList<>();
             tempBC = new ArrayList<>();
             tempBD = new ArrayList<>();
-            idealBallance = (circuit.size() - 2) / 2;
+            idealUnbalance = (circuit.size() - 2) / 2;
 
-            while (idealBallance > 0 && Math.abs(pathA.size() - idealBallance - 1) > 0) {
+            while (idealUnbalance > 0 && Math.abs(pathA.size() - idealUnbalance - 1) > 0) {
 
                 tempBranches = (ArrayList<Branch>) branches.clone();
 
-                subsetSum(tempBranches, 0, 0, Math.abs(pathA.size() - idealBallance - 1), solution);
+                subsetSum(tempBranches, 0, 0, Math.abs(pathA.size() - idealUnbalance - 1), solution);
                 
                 if (effectiveSolution.size() > 0) {
 
@@ -100,11 +100,11 @@ public class UnbalanceLowerCircuit {
 
                     paths.add(pathC);
                     paths.add(pathD);
-                    idealBallance = 1;
+                    idealUnbalance = 1;
 
                 }
                 effectiveSolution.clear();
-                idealBallance--;
+                idealUnbalance--;
 
             }
         }
@@ -124,7 +124,7 @@ public class UnbalanceLowerCircuit {
         pvceSize = 0;
 
         while (true) {
-
+            
             gTemp = g.copyOf();
             ixVertexX = gTemp.indexOf(s.label);
             if (ixVertexX == -1) {

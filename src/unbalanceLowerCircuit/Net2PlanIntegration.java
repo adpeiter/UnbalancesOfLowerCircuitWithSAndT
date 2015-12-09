@@ -159,7 +159,7 @@ public class Net2PlanIntegration implements IAlgorithm{
         ArrayList<ArrayList<Vertex>> balancedDisjointPaths;
         UnbalanceLowerCircuit ulc = new UnbalanceLowerCircuit();
         
-        balancedDisjointPaths = ulc.unbalancesOfLowerCircuitWithSAndT(graph, graph.vertices.get(inicio), graph.vertices.get(fim));
+        balancedDisjointPaths = ulc.unballancesOfLowerCircuitWithSAndT(graph, graph.vertices.get(inicio), graph.vertices.get(fim));
         
         return balancedDisjointPaths;
     }    

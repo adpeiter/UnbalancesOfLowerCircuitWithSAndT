@@ -45,7 +45,7 @@ public class Main {
             g.addEdge(g.vertices.get(8), g.vertices.get(7));
             g.addEdge(g.vertices.get(8), g.vertices.get(0));
             g.addEdge(g.vertices.get(8), g.vertices.get(3));
-            unbalanceLowerCircuit = ulc.unbalancesOfLowerCircuitWithSAndT(g, g.vertices.get(0), g.vertices.get(5));
+            unbalanceLowerCircuit = ulc.unballancesOfLowerCircuitWithSAndT(g, g.vertices.get(0), g.vertices.get(5));
             
             if (unbalanceLowerCircuit == null || unbalanceLowerCircuit.isEmpty())
                 System.out.println("Não encontrado caminho de s a t...");
@@ -89,7 +89,7 @@ public class Main {
             g.addEdge(g.vertices.get(10), g.vertices.get(1));
             g.addEdge(g.vertices.get(10), g.vertices.get(2));
             System.out.println(g.toString());
-            unbalanceLowerCircuit = ulc.unbalancesOfLowerCircuitWithSAndT(g, g.vertices.get(0), g.vertices.get(8));
+            unbalanceLowerCircuit = ulc.unballancesOfLowerCircuitWithSAndT(g, g.vertices.get(0), g.vertices.get(8));
             
             if (unbalanceLowerCircuit == null || unbalanceLowerCircuit.isEmpty())
                 System.out.println("Não encontrado caminho de s a t...");
@@ -130,7 +130,7 @@ public class Main {
                 for (int t = 0; t <= 6; t++) {
                     if (s != t) {
                         System.out.println("Verificando " + s + " a " + t + "...");
-                        unbalanceLowerCircuit = ulc.unbalancesOfLowerCircuitWithSAndT(g, g.vertices.get(s), g.vertices.get(t));
+                        unbalanceLowerCircuit = ulc.unballancesOfLowerCircuitWithSAndT(g, g.vertices.get(s), g.vertices.get(t));
                         if (unbalanceLowerCircuit == null || unbalanceLowerCircuit.isEmpty())
                             System.out.println("Não encontrado caminho de s a t...");
                         else {
@@ -166,7 +166,7 @@ public class Main {
             g.addEdge(g.vertices.get(7), g.vertices.get(2));
             
             System.out.println(g.toString());
-            unbalanceLowerCircuit = ulc.unbalancesOfLowerCircuitWithSAndT(g, g.vertices.get(0), g.vertices.get(8));
+            unbalanceLowerCircuit = ulc.unballancesOfLowerCircuitWithSAndT(g, g.vertices.get(0), g.vertices.get(8));
             
             if (unbalanceLowerCircuit == null || unbalanceLowerCircuit.isEmpty())
                 System.out.println("Não encontrado caminho de s a t...");
